@@ -84,7 +84,7 @@
              - onerror="this.style.display='none'": **ถ้าโหลดรูปไม่ขึ้น หรือลืมอัพรูปลงโฟลเดอร์ รูปนี้จะซ่อนตัวเองอัตโนมัติ**
              - วิธีเปลี่ยนรูป: นำรูปไปใส่ในโฟลเดอร์ images แล้วเปลี่ยนชื่อไฟล์ใน src="images/..."
         =========================================== -->
-        <div class="relative w-full flex justify-center">
+        <div class="hidden relative w-full flex justify-center">
             <img src="images/001.webp" 
                  alt="รูปภาพประกอบเนื้อหา" 
                  loading="lazy" 
@@ -92,54 +92,7 @@
                  class="w-full h-auto rounded-xl shadow-sm border border-gray-100">
         </div>
 
-        <div class="relative w-full flex justify-center">
-            <img src="images/002.webp" 
-                 alt="รูปภาพประกอบเนื้อหา" 
-                 loading="lazy" 
-                 onerror="this.style.display='none'"
-                 class="w-full h-auto rounded-xl shadow-sm border border-gray-100">
-        </div>
-
-         <div class="relative w-full flex justify-center">
-            <img src="images/003.webp" 
-                 alt="รูปภาพประกอบเนื้อหา" 
-                 loading="lazy" 
-                 onerror="this.style.display='none'"
-                 class="w-full h-auto rounded-xl shadow-sm border border-gray-100">
-        </div>
-
-         <div class="relative w-full flex justify-center">
-            <img src="images/004.webp" 
-                 alt="รูปภาพประกอบเนื้อหา" 
-                 loading="lazy" 
-                 onerror="this.style.display='none'"
-                 class="w-full h-auto rounded-xl shadow-sm border border-gray-100">
-        </div>
-
-         <div class="relative w-full flex justify-center">
-            <img src="images/005.webp" 
-                 alt="รูปภาพประกอบเนื้อหา" 
-                 loading="lazy" 
-                 onerror="this.style.display='none'"
-                 class="w-full h-auto rounded-xl shadow-sm border border-gray-100">
-        </div>
-
-
-         <div class="relative w-full flex justify-center">
-            <img src="images/006.webp" 
-                 alt="รูปภาพประกอบเนื้อหา" 
-                 loading="lazy" 
-                 onerror="this.style.display='none'"
-                 class="w-full h-auto rounded-xl shadow-sm border border-gray-100">
-        </div>
-
-         <div class="relative w-full flex justify-center">
-            <img src="images/007.webp" 
-                 alt="รูปภาพประกอบเนื้อหา" 
-                 loading="lazy" 
-                 onerror="this.style.display='none'"
-                 class="w-full h-auto rounded-xl shadow-sm border border-gray-100">
-        </div>
+       
         <!-- ==========================================
              ส่วนที่ 5: วิดีโอ YouTube (แนวนอนปกติ)
              - เปลี่ยนลิงก์ตรง src="..." เป็นลิงก์ embed ของคุณ
@@ -167,6 +120,19 @@
                 width="100%" 
                 height="100%" 
                 src="https://youtube.com/embed/aJmZb-puFOc" 
+                title="YouTube Shorts player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen
+                loading="lazy">
+            </iframe>
+        </div>
+
+        <div class="w-full max-w-sm mx-auto aspect-[9/16] rounded-xl overflow-hidden shadow-sm border border-gray-100 bg-gray-50">
+            <iframe 
+                width="100%" 
+                height="100%" 
+                src="https://youtube.com/embed/5qHKsgNLEsA" 
                 title="YouTube Shorts player" 
                 frameborder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
