@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>My Links</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            /* เพิ่มคุณสมบัติสำหรับ Background */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+        
+        /* สร้างเลเยอร์สำหรับสีทับ (Overlay) */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* ให้อยู่ด้านหลังเนื้อหา */
+            /* สี Overlay จะถูกกำหนดผ่าน JavaScript */
+        }
+
+        #root {
+            width: 100%;
+            max-width: 600px;
+            padding: 2rem 1rem;
+            position: relative; /* ให้เนื้อหาอยู่บน Overlay */
+            z-index: 1;
+        }
+        
+        .link-button {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+        .link-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .link-button:active {
+            transform: translateY(1px);
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* คลาสกำหนดขนาดรูปโลโก้ให้ใหญ่พิเศษ */
+        .logo-img {
+            width: 30px;  
+            height: 30px; 
+            object-fit: contain;
+        }
+    </style>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="root" class="flex flex-col items-center w-full animate-fade-in">
+        
+        <!-- ส่วนหัวโปรไฟล์ -->
+        <header class="flex flex-col items-center text-center mb-8 w-full">
+            <div class="w-28 h-28 mb-4 rounded-full overflow-hidden border-4 border-gray-100 shadow-md bg-white">
+                <img id="profile-img" src="images/profile.jpg" alt="Profile" class="w-full h-full object-cover" 
+                     onerror="this.src='https://placehold.co/150x150/f3f4f6/a1a1aa?text=Profile'">
+            </div>
+            <!-- คุณสามารถแก้ไขข้อความตรงนี้ได้ในส่วน JavaScript -->
+            <h1 id="profile-name" class="text-2xl font-bold text-gray-800 mb-1 leading-tight hidden"></h1>
+            <h2 id="profile-subtitle" class="text-lg font-medium text-gray-800 mb-2 hidden"></h2>
+            <p id="profile-desc" class="text-gray-700 text-sm mb-1 px-4 hidden"></p>
+            <p id="profile-bold" class="font-bold text-gray-800 text-sm mt-2 px-4 bg-white bg-opacity-70 py-1 rounded-full inline-block hidden"></p>
+        </header>
+
+        <!-- ส่วนของปุ่มลิงก์ต่างๆ จะถูกสร้างอัตโนมัติในส่วนนี้ -->
+        <main id="links-container" class="w-full flex flex-col items-center px-2">
+            <!-- ปุ่มจะถูกเพิ่มที่นี่โดย JavaScript -->
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-xs text-gray-800 bg-white bg-opacity-50 py-2 px-4 rounded-full hidden">
+            <p>&copy; <span id="current-year"></span> <span id="footer-name"></span></p>
+        </footer>
+
+    </div>
+
+    <script>
+        // ==========================================
+        // 🌟 ส่วนตั้งค่าพื้นหลัง (Background)
+        // ==========================================
+        const bgConfig = {
+            // 1. ใส่ URL รูปภาพพื้นหลัง (ถ้าไม่ใช้รูป ให้ปล่อยว่าง "")
+            imageUrl: "images/background.jpg", 
+            
+            // 2. ตั้งค่ารูปแบบสีทับ (Overlay)
+            // เลือกใช้ค่าใดค่าหนึ่ง: "solid" (สีทึบ/โปร่งใส), "gradient" (ไล่สี), หรือ "none" (ไม่ใส่สีทับ)
+            overlayType: "solid", 
+
+            // 2.1 กรณีใช้ overlayType: "solid"
+            // ใส่รหัสสี RGBA (ตัวเลขสุดท้ายคือความโปร่งใส 0.0 - 1.0)
+            // เช่น "rgba(255, 255, 255, 0.7)" คือสีขาว โปร่งใส 70%
+            solidColor: "rgba(255, 255, 255, 0.85)", 
+
+            // 2.2 กรณีใช้ overlayType: "gradient"
+            // ตัวอย่าง: ด้านบนสีขาว 90% ไล่ลงไปด้านล่างสีขาว 50%
+            gradientColor: "linear-gradient(to bottom, rgba(255,255,255, 0.95) 0%, rgba(255,255,255, 0.5) 100%)",
+            
+            // 3. สีพื้นหลังกรณีที่ไม่มีรูปภาพ (HEX Code)
+            fallbackColor: "#f3f4f6" 
+        };
+
+        // --- ส่วนที่คุณสามารถปรับแต่งข้อมูลส่วนอื่นๆ ได้ ---
+        
+        // 1. ข้อมูลส่วนหัวโปรไฟล์
+        const profileData = {
+            name: "ซอสสุขภาพ KT Fresh", // ข้อความ H1
+            subtitle: "ผลิตจากมะม่วงมหาชนก🍋", // ข้อความ H2
+            description: "สูตรพรีเมี่ยม", // ข้อความย่อหน้า (p)
+            boldText: "", // ข้อความตัวหนา (ถ้าไม่ต้องการให้เว้นว่างไว้ "")
+            footerName: "" // ชื่อ Footer ถ้าเว้นว่างไว้ "" ระบบจะซ่อน Footer ทั้งหมดให้อัตโนมัติ
+        };
+
+        // 2. ข้อมูลปุ่มลิงก์
+        const linkData = [
+            {
+                id: 1,
+                title: "Shopee",
+                url: "https://th.shp.ee/XyqeAQoj?share_channel_code=6",
+                iconClass: "fa-solid fa-bag-shopping", 
+                iconColor: "#ee4d2d", 
+                buttonColor: "#ffffff", 
+                outlineColor: "#ee4d2d", 
+                textColor: "#ee4d2d", 
+                imageSrc: "images/shopee.png", 
+                useImage: true, 
+                isVisible: true 
+            },
+            {
+                id: 2,
+                title: "Lazada",
+                url: "https://s.lazada.co.th/s.ZTwPLp",
+                iconClass: "fa-solid fa-heart",
+                iconColor: "#0f136d",
+                buttonColor: "#ffffff",
+                outlineColor: "#0f136d",
+                textColor: "#0f136d",
+                imageSrc: "images/lazada.png",
+                useImage: true,
+                isVisible: true
+            },
+            {
+                id: 3,
+                title: "LINE Shopping",
+                url: "https://liff.line.me/1572442362-jGxDDGRp/@964uqqun",
+                iconClass: "fa-brands fa-line",
+                iconColor: "#00c300",
+                buttonColor: "#ffffff", 
+                outlineColor: "#00c300", 
+                textColor: "#00c300", 
+                imageSrc: "images/lineshopping.png",
+                useImage: true,
+                isVisible: true
+            },
+            {
+                id: 4,
+                title: "Facebook Page",
+                url: "https://facebook.com/your_page",
+                iconClass: "fa-brands fa-facebook",
+                iconColor: "#1877f2",
+                buttonColor: "#ffffff",
+                outlineColor: "#e5e7eb",
+                textColor: "#374151",
+                useImage: false,
+                isVisible: false
+            }
+        ];
+
+        // ==========================================
+        // ระบบประมวลผล (ไม่ต้องแก้ไขด้านล่างนี้)
+        // ==========================================
+
+        // ฟังก์ชันประยุกต์ใช้ Background
+        function applyBackground() {
+            const body = document.body;
+            
+            // ตั้งค่ารูปภาพหรือสีพื้นหลังหลัก
+            if (bgConfig.imageUrl && bgConfig.imageUrl.trim() !== "") {
+                body.style.backgroundImage = `url('${bgConfig.imageUrl}')`;
+            } else {
+                body.style.backgroundColor = bgConfig.fallbackColor;
+            }
+
+            // ตั้งค่า Overlay (สีทับ) โดยแก้ไข style ของ ::before ผ่าน CSS
+            let overlayStyle = "";
+            if (bgConfig.overlayType === "solid") {
+                overlayStyle = `background-color: ${bgConfig.solidColor};`;
+            } else if (bgConfig.overlayType === "gradient") {
+                overlayStyle = `background: ${bgConfig.gradientColor};`;
+            } else {
+                overlayStyle = `display: none;`;
+            }
+
+            // แทรกสไตล์ Overlay เข้าไปใน <head>
+            const style = document.createElement('style');
+            style.innerHTML = `body::before { ${overlayStyle} }`;
+            document.head.appendChild(style);
+        }
+        
+        // เรียกใช้ฟังก์ชันจัดการ Background
+        applyBackground();
+
+        // ฟังก์ชันตัวช่วยสำหรับกำหนดข้อความและซ่อนพื้นที่ถ้าข้อมูลว่างเปล่า
+        function setTextOrHideElement(elementId, text) {
+            const el = document.getElementById(elementId);
+            if (text && text.trim() !== "") {
+                el.textContent = text;
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        // นำข้อมูลส่วนหัวไปแสดงบนหน้าเว็บ
+        setTextOrHideElement('profile-name', profileData.name);
+        setTextOrHideElement('profile-subtitle', profileData.subtitle);
+        setTextOrHideElement('profile-desc', profileData.description);
+        setTextOrHideElement('profile-bold', profileData.boldText);
+        
+        // จัดการ Footer (ข้อความด้านล่างสุด)
+        const footerNameEl = document.getElementById('footer-name');
+        if (profileData.footerName && profileData.footerName.trim() !== "") {
+            footerNameEl.textContent = profileData.footerName;
+            footerNameEl.parentElement.parentElement.classList.remove('hidden');
+        } else {
+            footerNameEl.parentElement.parentElement.classList.add('hidden');
+        }
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // ฟังก์ชันสร้างปุ่มลิงก์
+        const container = document.getElementById('links-container');
+
+        linkData.forEach(link => {
+            if (!link.isVisible) return; 
+
+            const a = document.createElement('a');
+            a.href = link.url;
+            a.target = "_blank"; 
+            a.rel = "noopener noreferrer"; 
+            a.className = "link-button block w-full rounded-full py-3 px-3 mb-4 flex items-center shadow-sm"; 
+            
+            a.style.backgroundColor = link.buttonColor;
+            a.style.color = link.textColor;
+            if (link.outlineColor !== 'transparent') {
+                a.style.border = `2px solid ${link.outlineColor}`;
+            }
+
+            const iconDiv = document.createElement('div');
+            iconDiv.className = "flex-shrink-0 flex items-center justify-center mr-2";
+
+            if (link.useImage && link.imageSrc) {
+                const img = document.createElement('img');
+                img.src = link.imageSrc;
+                img.alt = `${link.title} icon`;
+                img.className = "logo-img"; // ใช้คลาสขนาดรูปใหญ่พิเศษ
+                img.onerror = function() {
+                    this.style.display = 'none';
+                    if (this.nextElementSibling) {
+                        this.nextElementSibling.style.display = 'block';
+                    }
+                };
+                iconDiv.appendChild(img);
+            }
+
+            const i = document.createElement('i');
+            i.className = `${link.iconClass} text-2xl px-2`;
+            i.style.color = link.iconColor;
+            if (link.useImage && link.imageSrc) {
+                i.style.display = 'none'; 
+            }
+            iconDiv.appendChild(i);
+
+            const titleDiv = document.createElement('div');
+            titleDiv.className = "flex-grow text-center font-medium text-lg pr-[55px]"; 
+            titleDiv.textContent = link.title;
+
+            a.appendChild(iconDiv);
+            a.appendChild(titleDiv);
+            
+            container.appendChild(a);
+        });
+    </script>
+</body>
+</html>
