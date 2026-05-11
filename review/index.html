@@ -2,27 +2,62 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
+    <!-- ตั้งค่า Viewport: รองรับมือถือ 100% และอนุญาตให้ใช้นิ้วถ่างขยาย (Pinch-to-zoom) ได้ -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KT FRESH</title>
     
+    <!-- ==========================================
+         ส่วนของ Open Graph (OG) สำหรับแชร์ลง LINE, Facebook, Twitter
+         - จะแสดงรูปและข้อความนี้เมื่อมีคนนำลิงก์เว็บไปแชร์
+         - เปลี่ยนนามสกุลไฟล์ที่ content="images/feature.jpg" เป็น .png หรือ .webp ตามที่คุณใช้จริง
+    =========================================== -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="KT FRESH ">
     <meta property="og:description" content="ผลิตภัณฑ์อาหารจากมะม่วงมหาชนก">
     <meta property="og:image" content="images/feature.jpg">
 
+    <!-- ==========================================
+         ส่วนของ Twitter Card สำหรับแชร์ลง Twitter
+         - คล้ายกับ Open Graph แต่สำหรับ Twitter โดยเฉพาะ
+    =========================================== -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="KT FRESH">
+    <meta name="twitter:description" content="ผลิตภัณฑ์อาหารจากมะม่วงมหาชนก">
+    <meta name="twitter:image" content="images/feature.jpg">
+
+    <!-- ==========================================
+         โหลดฟอนต์ Prompt จาก Google Fonts เพื่อความสวยงามทันสมัย
+         - สามารถเปลี่ยนเป็นฟอนต์อื่นได้ตามต้องการ
+    =========================================== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- ==========================================
+         โหลด Tailwind CSS ผ่าน CDN สำหรับใช้จัดหน้าเว็บให้ทันสมัยและโหลดเร็ว
+         - เป็น CSS Framework ที่ช่วยให้เขียน CSS ได้ง่ายขึ้น
+    =========================================== -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- ==========================================
+         ส่วนของ CSS Styles ที่กำหนดเอง
+    =========================================== -->
     <style>
+        /* ตั้งค่าฟอนต์หลักและพื้นหลังสีขาวตามที่ระบุ */
         body {
             font-family: 'Prompt', sans-serif;
             background-color: #ffffff;
+            /* ป้องกันแนวนอนเลื่อน (Horizontal Scroll) */
             overflow-x: hidden;
         }
-        /* สไตล์สำหรับ Lite Embed */
+        
+        /* สไตล์สำหรับ Lite Embed (รูปภาพหน้าปกวิดีโอ)
+           - background-color: สีพื้นหลังเมื่อรูปภาพยังไม่โหลด
+           - position: relative: เพื่อให้ปุ่ม Play อยู่ตรงกลางได้
+           - contain: content: ช่วยให้เบราว์เซอร์จัดการการแสดงผลได้ดีขึ้น
+           - cursor: pointer: เปลี่ยนเคอร์เซอร์เป็นรูปมือเมื่อชี้
+           - background-position/size/repeat: จัดการการแสดงผลของรูปภาพหน้าปก
+        */
         .youtube-lite {
             background-color: #000;
             position: relative;
@@ -31,97 +66,196 @@
             cursor: pointer;
             background-position: center;
             background-size: cover;
+            background-repeat: no-repeat;
         }
-        /* ปุ่ม Play จำลอง */
+        
+        /* ปุ่ม Play จำลอง (ใช้ pseudo-element ::before)
+           - content: '': สร้างเนื้อหาว่างเปล่า
+           - background-image: ใช้ SVG สำหรับไอคอน Play สีแดง
+           - filter: grayscale: ทำให้ไอคอนดูจางลงเล็กน้อย
+           - transition: เพิ่มอนิเมชันเมื่อเมาส์ชี้
+           - z-index: ทำให้ปุ่มอยู่ด้านบนสุด
+        */
         .youtube-lite::before {
             content: '';
             display: block;
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%); /* จัดให้อยู่กึ่งกลาง */
             width: 68px;
             height: 48px;
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 48"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.64 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/><path d="M45 24L27 14v20" fill="white"/></svg>');
-            filter: grayscale(10%);
+            filter: grayscale(10%); /* ทำให้สีจางลงเล็กน้อย */
             transition: filter 0.1s cubic-bezier(0, 0, 0.2, 1);
             z-index: 1;
         }
+        
+        /* เมื่อเมาส์ชี้ที่ปุ่ม Play */
         .youtube-lite:hover::before {
-            filter: none;
+            filter: none; /* ทำให้สีกลับมาปกติ */
         }
-        /* ซ่อนวิดีโอที่ยังไม่ถึงคิวแสดง */
+        
+        /* คลาสสำหรับซ่อนวิดีโอที่ยังไม่ถึงคิวแสดง (ใช้กับระบบ Load More) */
         .video-item.hidden-video {
             display: none;
         }
     </style>
 </head>
 
+<!-- 
+     ส่วน Body ของหน้าเว็บ
+     - text-gray-800: สีข้อความเป็นสีเทาเข้ม
+     - antialiased: ทำให้ตัวอักษรดูเรียบเนียน
+     - pb-32 lg:pb-0: กำหนด padding ด้านล่างสำหรับมือถือ (32 หน่วย) และยกเลิกสำหรับ Desktop (0 หน่วย)
+-->
 <body class="text-gray-800 antialiased pb-32 lg:pb-0">
 
+    <!-- 
+      โครงสร้างหลัก (1 Column):
+      - max-w-2xl: จำกัดความกว้างสูงสุดให้อ่านง่าย ไม่กว้างเกินไปบนจอคอม
+      - mx-auto: จัดให้อยู่กึ่งกลางหน้าจอ
+      - p-4 lg:p-8: กำหนด padding รอบด้านสำหรับมือถือ (4 หน่วย) และ Desktop (8 หน่วย)
+      - flex flex-col gap-8: จัดเรียงเนื้อหาเป็นคอลัมน์และมีช่องว่างระหว่าง Element 8 หน่วย
+    -->
     <main class="w-full max-w-2xl mx-auto p-4 lg:p-8 flex flex-col gap-8">
 
+        <!-- ==========================================
+             ส่วนที่ 1: หัวข้อหลัก (H1)
+             - hidden: ซ่อน Element นี้ไว้ (สามารถลบออกเพื่อแสดงได้)
+             - text-3xl md:text-4xl: ขนาดตัวอักษรสำหรับมือถือ (3xl) และ Desktop (4xl)
+             - font-semibold: ตัวหนาปานกลาง
+             - text-gray-900: สีข้อความ
+             - mt-4: margin-top 4 หน่วย
+             - text-center lg:text-left: จัดข้อความกึ่งกลางสำหรับมือถือ และชิดซ้ายสำหรับ Desktop
+        =========================================== -->
         <h1 class="hidden text-3xl md:text-4xl font-semibold text-gray-900 mt-4 text-center lg:text-left">
             หัวข้อหลักของเว็บไซต์
         </h1>
 
+        <!-- ==========================================
+             ส่วนที่ 2: หัวข้อรอง (H2)
+             - hidden: ซ่อน Element นี้ไว้ (สามารถลบออกเพื่อแสดงได้)
+             - text-xl md:text-2xl: ขนาดตัวอักษรสำหรับมือถือ (xl) และ Desktop (2xl)
+             - font-semibold: ตัวหนาปานกลาง
+             - text-gray-700: สีข้อความ
+             - text-center lg:text-left: จัดข้อความกึ่งกลางสำหรับมือถือ และชิดซ้ายสำหรับ Desktop
+        =========================================== -->
+        <h2 class="hidden text-xl md:text-2xl font-semibold text-gray-700 text-center lg:text-left">
+            นี่คือหัวข้อรอง สามารถปรับเปลี่ยนสีและเนื้อหาได้ตามต้องการ
+        </h2>
+
+        <!-- ==========================================
+             ส่วนที่ 3: ข้อความ P (ย่อหน้า)
+             - text-base md:text-lg: ขนาดตัวอักษรสำหรับมือถือ (base) และ Desktop (lg)
+             - text-[#1F1F1F]: สีข้อความ (สามารถเปลี่ยนเป็นสีอื่นได้)
+             - leading-relaxed: ระยะห่างระหว่างบรรทัด
+             - text-center lg:text-left: จัดข้อความกึ่งกลางสำหรับมือถือ และชิดซ้ายสำหรับ Desktop
+        =========================================== -->
         <p class="text-base md:text-lg text-[#1F1F1F] leading-relaxed text-center lg:text-left">
             ท้าพิสูจน์ความอร่อย! 🤔 ซอสมะม่วงมหาชนก KT FRESH ทั้ง 4 รสชาติ 🥭 ไปมิกซ์แอนด์แมตช์กับเมนูโปรด ทั้งฟาสต์ฟู้ด 🍔🍟 บาร์บีคิว 🍖🔥 และสลัด 🥗 การันตีความอร่อยฟินเข้ากันสุดๆ จนต้องมีติดบ้าน! 💛🛒
         </p>
 
-        <!-- ส่วนของวิดีโอ -->
+        <!-- ==========================================
+             ส่วนของวิดีโอ YouTube Shorts
+             - id="video-container": ใช้สำหรับ JavaScript ในการจัดการวิดีโอ
+             - flex flex-col gap-8: จัดเรียงวิดีโอเป็นคอลัมน์และมีช่องว่างระหว่างวิดีโอ 8 หน่วย
+        =========================================== -->
         <div id="video-container" class="flex flex-col gap-8">
             
-            <!-- วิดีโอที่ 1 -->
+            <!-- 
+                 โครงสร้างของวิดีโอแต่ละตัว (Video Item)
+                 - video-item: คลาสสำหรับ JavaScript ในการเลือกวิดีโอ
+                 - hidden-video: คลาสสำหรับซ่อนวิดีโอที่ยังไม่ถึงคิวแสดง (จะถูกลบออกเมื่อกด Load More)
+                 - w-full max-w-sm mx-auto: กำหนดความกว้างสูงสุดและจัดกึ่งกลาง
+                 - aspect-[9/16]: กำหนดอัตราส่วนภาพเป็น 9:16 (แนวตั้งสำหรับ Shorts)
+                 - rounded-xl overflow-hidden shadow-sm border border-gray-100 bg-gray-50: สไตล์ตกแต่งกรอบวิดีโอ
+            -->
+            <!-- วิดีโอที่ 1 (แสดงทันที) -->
             <div class="video-item w-full max-w-sm mx-auto aspect-[9/16] rounded-xl overflow-hidden shadow-sm border border-gray-100 bg-gray-50">
-                <div class="youtube-lite w-full h-full" data-id="aJmZb-puFOc" style="background-image: url('https://img.youtube.com/vi/aJmZb-puFOc/maxresdefault.jpg');"></div>
+                <!-- 
+                     youtube-lite: คลาสสำหรับระบบ Lite Embed
+                     - data-id: เก็บ Video ID ของ YouTube (สำคัญมาก)
+                     - style="background-image: url(...)": ดึงรูปหน้าปกจาก YouTube โดยใช้ hqdefault.jpg เพื่อให้แสดงผลได้แน่นอน
+                       (สามารถเปลี่ยนเป็น maxresdefault.jpg หากต้องการความละเอียดสูงสุด แต่บางวิดีโออาจไม่มี)
+                -->
+                <div class="youtube-lite w-full h-full" data-id="aJmZb-puFOc" style="background-image: url('https://img.youtube.com/vi/aJmZb-puFOc/hqdefault.jpg');"></div>
             </div>
 
-            <!-- วิดีโอที่ 2 -->
+            <!-- วิดีโอที่ 2 (แสดงทันที) -->
             <div class="video-item w-full max-w-sm mx-auto aspect-[9/16] rounded-xl overflow-hidden shadow-sm border border-gray-100 bg-gray-50">
-                <div class="youtube-lite w-full h-full" data-id="S8WhwnR36tc" style="background-image: url('https://img.youtube.com/vi/S8WhwnR36tc/maxresdefault.jpg');"></div>
+                <div class="youtube-lite w-full h-full" data-id="S8WhwnR36tc" style="background-image: url('https://img.youtube.com/vi/S8WhwnR36tc/hqdefault.jpg');"></div>
             </div>
 
-            <!-- วิดีโอที่ 3 -->
+            <!-- วิดีโอที่ 3 (แสดงทันที) -->
             <div class="video-item w-full max-w-sm mx-auto aspect-[9/16] rounded-xl overflow-hidden shadow-sm border border-gray-100 bg-gray-50">
-                <div class="youtube-lite w-full h-full" data-id="5qHKsgNLEsA" style="background-image: url('https://img.youtube.com/vi/5qHKsgNLEsA/maxresdefault.jpg');"></div>
+                <div class="youtube-lite w-full h-full" data-id="5qHKsgNLEsA" style="background-image: url('https://img.youtube.com/vi/5qHKsgNLEsA/hqdefault.jpg');"></div>
             </div>
 
-            <!-- วิดีโอที่เหลือ (ซ่อนไว้ก่อน) -->
+            <!-- วิดีโอที่ 4 (ซ่อนไว้ก่อน - จะแสดงเมื่อกด Load More) -->
             <div class="video-item hidden-video w-full max-w-sm mx-auto aspect-[9/16] rounded-xl overflow-hidden shadow-sm border border-gray-100 bg-gray-50">
-                <div class="youtube-lite w-full h-full" data-id="v-Qh4Qd4Kk0" style="background-image: url('https://img.youtube.com/vi/v-Qh4Qd4Kk0/maxresdefault.jpg');"></div>
+                <div class="youtube-lite w-full h-full" data-id="v-Qh4Qd4Kk0" style="background-image: url('https://img.youtube.com/vi/v-Qh4Qd4Kk0/hqdefault.jpg');"></div>
             </div>
 
+            <!-- วิดีโอที่ 5 (ซ่อนไว้ก่อน - จะแสดงเมื่อกด Load More) -->
             <div class="video-item hidden-video w-full max-w-sm mx-auto aspect-[9/16] rounded-xl overflow-hidden shadow-sm border border-gray-100 bg-gray-50">
-                <div class="youtube-lite w-full h-full" data-id="cHUEawfcpWU" style="background-image: url('https://img.youtube.com/vi/cHUEawfcpWU/maxresdefault.jpg');"></div>
+                <div class="youtube-lite w-full h-full" data-id="cHUEawfcpWU" style="background-image: url('https://img.youtube.com/vi/cHUEawfcpWU/hqdefault.jpg');"></div>
             </div>
 
+            <!-- วิดีโอที่ 6 (ซ่อนไว้ก่อน - จะแสดงเมื่อกด Load More) -->
             <div class="video-item hidden-video w-full max-w-sm mx-auto aspect-[9/16] rounded-xl overflow-hidden shadow-sm border border-gray-100 bg-gray-50">
-                <div class="youtube-lite w-full h-full" data-id="Yv8HDq8V8oc" style="background-image: url('https://img.youtube.com/vi/Yv8HDq8V8oc/maxresdefault.jpg');"></div>
+                <div class="youtube-lite w-full h-full" data-id="Yv8HDq8V8oc" style="background-image: url('https://img.youtube.com/vi/Yv8HDq8V8oc/hqdefault.jpg');"></div>
             </div>
 
+            <!-- วิดีโอที่ 7 (ซ่อนไว้ก่อน - จะแสดงเมื่อกด Load More) -->
             <div class="video-item hidden-video w-full max-w-sm mx-auto aspect-[9/16] rounded-xl overflow-hidden shadow-sm border border-gray-100 bg-gray-50">
-                <div class="youtube-lite w-full h-full" data-id="RzU92E5oDj0" style="background-image: url('https://img.youtube.com/vi/RzU92E5oDj0/maxresdefault.jpg');"></div>
+                <div class="youtube-lite w-full h-full" data-id="RzU92E5oDj0" style="background-image: url('https://img.youtube.com/vi/RzU92E5oDj0/hqdefault.jpg');"></div>
             </div>
 
+            <!-- วิดีโอที่ 8 (ซ่อนไว้ก่อน - จะแสดงเมื่อกด Load More) -->
             <div class="video-item hidden-video w-full max-w-sm mx-auto aspect-[9/16] rounded-xl overflow-hidden shadow-sm border border-gray-100 bg-gray-50">
-                <div class="youtube-lite w-full h-full" data-id="h79pkCWgoc8" style="background-image: url('https://img.youtube.com/vi/h79pkCWgoc8/maxresdefault.jpg');"></div>
+                <div class="youtube-lite w-full h-full" data-id="h79pkCWgoc8" style="background-image: url('https://img.youtube.com/vi/h79pkCWgoc8/hqdefault.jpg');"></div>
             </div>
         </div>
 
-        <!-- ปุ่ม Load More -->
+        <!-- ==========================================
+             ส่วนของปุ่ม Load More
+             - id="load-more-container": ใช้สำหรับ JavaScript ในการซ่อน/แสดงปุ่ม
+             - flex justify-center mt-4: จัดปุ่มกึ่งกลางและมี margin-top 4 หน่วย
+        =========================================== -->
         <div id="load-more-container" class="flex justify-center mt-4">
-            <button id="load-more-btn" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-8 rounded-xl transition-colors border border-gray-200">
+            <!-- 
+                 ปุ่ม "ดูวิดีโอเพิ่มเติม"
+                 - id="load-more-btn": ใช้สำหรับ JavaScript ในการเพิ่ม Event Listener
+                 - bg-gradient-to-r from-orange-400 to-orange-500: สีพื้นหลังแบบไล่เฉดสีส้ม
+                 - hover:from-orange-500 hover:to-orange-600: เปลี่ยนสีเมื่อเมาส์ชี้
+                 - text-white font-semibold: สีข้อความขาวและตัวหนา
+                 - py-3 px-8: padding แนวตั้ง 3 หน่วย แนวนอน 8 หน่วย
+                 - rounded-xl: ขอบมน
+                 - transition-all shadow-md hover:shadow-lg: เพิ่มอนิเมชันและเงาเมื่อเมาส์ชี้
+            -->
+            <button id="load-more-btn" class="bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-semibold py-3 px-8 rounded-xl transition-all shadow-md hover:shadow-lg">
                 ดูวิดีโอเพิ่มเติม
             </button>
         </div>
 
+        <!-- ==========================================
+             ส่วนของข้อความสอบถาม/สั่งซื้อ
+        =========================================== -->
         <p class="text-base md:text-lg text-[#1F1F1F] leading-relaxed text-center lg:text-left">
             สนใจสอบถามหรือสั่งซื้อทางแชทหรือสั่งซื้อออนไลน์ได้เลยค่ะ🛒
         </p>
 
+        <!-- ==========================================
+             ส่วนที่ 8: ปุ่มเพื่อน LINE สีเขียว (ลอยติดขอบจอด้านล่าง)
+             - มือถือ/แท็บเล็ต: ลอยติดขอบจอด้านล่าง มีพื้นหลังสีขาวโปร่งแสงรองรับ (Dock)
+             - Desktop: อยู่ต่อท้ายเนื้อหาปกติ
+             - สามารถซ่อนได้โดยเพิ่ม hidden ไว้ใน class ของ <div> ด้านล่างนี้
+        =========================================== -->
         <div class="fixed bottom-0 left-0 right-0 p-4 pb-6 z-50 flex justify-center bg-white/95 backdrop-blur-sm border-t border-gray-100 shadow-[0_-10px_20px_-5px_rgba(0,0,0,0.05)] lg:static lg:p-0 lg:bg-transparent lg:border-0 lg:shadow-none lg:backdrop-blur-none lg:bottom-auto lg:z-auto">
             <a href="https://lin.ee/yqZfpvV" target="_blank" class="flex items-center justify-center w-full max-w-md mx-auto bg-[#00B900] hover:bg-[#00a000] text-white text-lg font-medium py-4 px-6 rounded-2xl shadow-lg lg:shadow-md transition-transform transform hover:scale-[1.02] active:scale-95">
+                <!-- ไอคอน LINE (โหลดจากโฟลเดอร์ images) -->
+                <!-- ถ้าไม่มีไฟล์รูปภาพอยู่ในโฟลเดอร์ ระบบจะซ่อนไอคอนอัตโนมัติ (onerror) -->
                 <img src="images/line-icon.png" alt="LINE Icon" class="w-7 h-7 mr-3 object-contain" onerror="this.style.display='none'">
                 สอบถาม/สั่งซื้อ ทักแชทได้เลย!
             </a>
@@ -129,44 +263,73 @@
 
     </main>
 
+    <!-- ==========================================
+         ส่วนของ JavaScript สำหรับการทำงานของ Lite Embed และ Load More
+    =========================================== -->
     <script>
+        // รอให้ DOM (โครงสร้าง HTML) โหลดเสร็จก่อนเริ่มทำงาน JavaScript
         document.addEventListener('DOMContentLoaded', function() {
             // 1. ระบบ Lite Embed: เปลี่ยนรูปเป็นวิดีโอเมื่อคลิก
-            const youtubeLites = document.querySelectorAll('.youtube-lite');
-            youtubeLites.forEach(el => {
-                el.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    const iframe = document.createElement('iframe');
-                    iframe.setAttribute('width', '100%');
-                    iframe.setAttribute('height', '100%');
-                    iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1`);
-                    iframe.setAttribute('frameborder', '0');
-                    iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
-                    iframe.setAttribute('allowfullscreen', '1');
-                    
-                    this.innerHTML = '';
-                    this.appendChild(iframe);
-                    this.classList.remove('youtube-lite'); // เอาปุ่ม Play ออก
+            function initYoutubeLite() {
+                // เลือก Element ทั้งหมดที่มีคลาส youtube-lite
+                const youtubeLites = document.querySelectorAll('.youtube-lite');
+                youtubeLites.forEach(el => {
+                    // ตรวจสอบว่า Element นี้ยังไม่เคยถูกโหลดวิดีโอจริง (ป้องกันการเพิ่ม Event ซ้ำ)
+                    if (!el.classList.contains('loaded')) {
+                        // เพิ่ม Event Listener เมื่อมีการคลิกที่รูปหน้าปก
+                        el.addEventListener('click', function() {
+                            // ดึง Video ID จาก attribute data-id
+                            const id = this.getAttribute('data-id');
+                            // สร้าง Element iframe สำหรับวิดีโอ YouTube
+                            const iframe = document.createElement('iframe');
+                            iframe.setAttribute('width', '100%');
+                            iframe.setAttribute('height', '100%');
+                            // กำหนด src ของ iframe ให้เป็นลิงก์ embed ของ YouTube พร้อม autoplay=1 เพื่อให้เล่นทันที
+                            iframe.setAttribute('src', `https://www.youtube.com/embed/${id}?autoplay=1`);
+                            iframe.setAttribute('frameborder', '0');
+                            iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+                            iframe.setAttribute('allowfullscreen', '1');
+                            
+                            // ลบเนื้อหาเดิม (รูปหน้าปกและปุ่ม Play) ออก
+                            this.innerHTML = '';
+                            // เพิ่ม iframe เข้าไปแทนที่
+                            this.appendChild(iframe);
+                            // ลบคลาส youtube-lite และเพิ่มคลาส loaded เพื่อระบุว่าวิดีโอถูกโหลดแล้ว
+                            this.classList.remove('youtube-lite');
+                            this.classList.add('loaded');
+                        });
+                    }
                 });
-            });
+            }
 
             // 2. ระบบ Load More
+            // เลือกปุ่ม Load More และวิดีโอที่ซ่อนอยู่ทั้งหมด
             const loadMoreBtn = document.getElementById('load-more-btn');
             const hiddenVideos = document.querySelectorAll('.video-item.hidden-video');
-            let currentVisibleIndex = 0;
-            const batchSize = 2;
+            let currentVisibleIndex = 0; // Index ของวิดีโอที่มองเห็นล่าสุด
+            const batchSize = 2; // จำนวนวิดีโอที่จะโหลดเพิ่มในแต่ละครั้ง
 
+            // เพิ่ม Event Listener เมื่อมีการคลิกที่ปุ่ม Load More
             loadMoreBtn.addEventListener('click', function() {
                 let count = 0;
+                // วนลูปเพื่อแสดงวิดีโอตาม batchSize
                 for (let i = currentVisibleIndex; i < hiddenVideos.length && count < batchSize; i++) {
-                    hiddenVideos[i].classList.remove('hidden-video');
+                    hiddenVideos[i].classList.remove('hidden-video'); // ลบคลาส hidden-video เพื่อแสดงวิดีโอ
                     currentVisibleIndex++;
                     count++;
                 }
+                
+                // เรียก initYoutubeLite() ใหม่เพื่อให้ระบบ Lite Embed ทำงานกับวิดีโอที่เพิ่งโหลดมาใหม่
+                initYoutubeLite();
+                
+                // ถ้าแสดงวิดีโอครบหมดแล้ว ให้ซ่อนปุ่ม Load More
                 if (currentVisibleIndex >= hiddenVideos.length) {
                     document.getElementById('load-more-container').style.display = 'none';
                 }
             });
+
+            // เรียก initYoutubeLite() ครั้งแรกเมื่อหน้าเว็บโหลดเสร็จ เพื่อให้วิดีโอที่แสดงเริ่มต้นทำงานได้
+            initYoutubeLite();
         });
     </script>
 
